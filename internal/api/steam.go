@@ -40,8 +40,6 @@ func (config *ApiConfig) GetFriendList(steamid string) (FriendsList, error) {
 
 	base.RawQuery = query.Encode()
 
-	log.Println("Sending request to steam API at:", base.String())
-
 	resp, err := http.Get(base.String())
 	if err != nil {
 		return FriendsList{}, err

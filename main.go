@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/PFrek/steam-affinity/internal/api"
-	"github.com/PFrek/steam-affinity/internal/urls"
 	"github.com/joho/godotenv"
 )
 
@@ -34,8 +33,9 @@ func main() {
 		ReadHeaderTimeout: 2 * time.Second,
 	}
 
-	apiV1baseURL := urls.URLChain{URL: "/api/v1/friends"}
-	mux.HandleFunc(apiV1baseURL.URL, config.GetFriendsHandler)
+	apiV1baseURL := "/api/v1/friends"
+
+	mux.HandleFunc(apiV1baseURL, config.GetFriendsHandler)
 
 	log.Println("Starting server on port", port)
 	server.ListenAndServe()

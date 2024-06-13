@@ -43,9 +43,14 @@ func RespondWithJSON(w http.ResponseWriter, status int, body any) {
 	w.Write(data)
 }
 
+func logRequest(req *http.Request, statusCode int) {
+	log.Printf("%s %s - %d", req.Method, req.URL, statusCode)
+}
+
 func (config *ApiConfig) GetFriendsHandler(w http.ResponseWriter, req *http.Request) {
 	id := req.URL.Query().Get("steamid")
 	if id == "" {
+		logRequest(req, 400)
 		RespondWithError(w, 400, "Query param 'steamid' is required")
 		return
 	}
@@ -53,13 +58,16 @@ func (config *ApiConfig) GetFriendsHandler(w http.ResponseWriter, req *http.Requ
 	friends, err := config.GetFriendList(id)
 	if err != nil {
 		if errors.Is(err, InvalidSteamIDError{}) {
+			logRequest(req, 400)
 			RespondWithError(w, 400, err.Error())
 			return
 		}
 
+		logRequest(req, 500)
 		RespondWithError(w, 500, err.Error())
 		return
 	}
 
+	logRequest(req, 200)
 	RespondWithJSON(w, 200, friends)
 }
