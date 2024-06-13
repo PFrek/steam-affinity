@@ -4,11 +4,21 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/PFrek/steam-affinity/internal/api"
 	"github.com/joho/godotenv"
 )
+
+func TryAtoi(s string, defaultValue int) int {
+	result, err := strconv.Atoi(s)
+	if err != nil {
+		return defaultValue
+	}
+
+	return result
+}
 
 func main() {
 	err := godotenv.Load()
@@ -19,8 +29,24 @@ func main() {
 	steamApiKey := os.Getenv("STEAM_APIKEY")
 	port := os.Getenv("PORT")
 
+	friendsCacheRenew := time.Duration(TryAtoi(os.Getenv("FRIENDS_CACHE_RENEW"), 5))
+	summariesCacheRenew := time.Duration(TryAtoi(os.Getenv("SUMMARIES_CACHE_RENEW"), 1440))
+	gamesCacheRenew := time.Duration(TryAtoi(os.Getenv("GAMES_CACHE_RENEW"), 30))
+
 	config := api.ApiConfig{
 		SteamApiKey: steamApiKey,
+		FriendsListCache: api.Cache[api.FriendsList]{
+			Cache:      map[string]api.CacheEntry[api.FriendsList]{},
+			CacheRenew: friendsCacheRenew * time.Minute,
+		},
+		SummariesCache: api.Cache[api.Summaries]{
+			Cache:      map[string]api.CacheEntry[api.Summaries]{},
+			CacheRenew: summariesCacheRenew * time.Minute,
+		},
+		OwnedGamesCache: api.Cache[api.OwnedGames]{
+			Cache:      map[string]api.CacheEntry[api.OwnedGames]{},
+			CacheRenew: gamesCacheRenew * time.Minute,
+		},
 	}
 
 	mux := http.NewServeMux()

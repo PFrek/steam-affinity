@@ -13,6 +13,10 @@ import (
 
 type ApiConfig struct {
 	SteamApiKey string
+
+	FriendsListCache Cache[FriendsList]
+	SummariesCache   Cache[Summaries]
+	OwnedGamesCache  Cache[OwnedGames]
 }
 
 func RespondWithError(w http.ResponseWriter, status int, message string) {
@@ -216,11 +220,12 @@ func (config *ApiConfig) GetAffinityRanking(w http.ResponseWriter, req *http.Req
 	}
 
 	wg := sync.WaitGroup{}
-	results := []CompareResult{}
+	ch := make(chan CompareResult, len(friendsList.Friends))
 
 	for _, friend := range friendsList.Friends {
 		wg.Add(1)
-		go func(friend Friend) {
+
+		go func(friend Friend, ch chan CompareResult) {
 			defer wg.Done()
 
 			friendsGames, err := config.GetOwnedGames(friend.SteamID)
@@ -238,11 +243,17 @@ func (config *ApiConfig) GetAffinityRanking(w http.ResponseWriter, req *http.Req
 
 			result := ownedGames.CompareOwnedGames(friendsGames, listGames)
 
-			results = append(results, result)
-		}(friend)
+			ch <- result
+		}(friend, ch)
 	}
 
 	wg.Wait()
+
+	results := []CompareResult{}
+	for range len(friendsList.Friends) {
+		result := <-ch
+		results = append(results, result)
+	}
 
 	slices.SortFunc(results, func(a CompareResult, b CompareResult) int {
 		return cmp.Compare(b.AffinityAvg, a.AffinityAvg)

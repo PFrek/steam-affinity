@@ -41,6 +41,11 @@ type FriendsListResponse struct {
 }
 
 func (config *ApiConfig) GetFriendList(steamid string) (FriendsList, error) {
+	if config.FriendsListCache.IsCacheHit(steamid) {
+		log.Println("FriendsList cache hit for", steamid)
+		return config.FriendsListCache.Cache[steamid].Data, nil
+	}
+
 	base, err := url.Parse(steamBaseURL)
 	if err != nil {
 		return FriendsList{}, errors.New("Failed to parse steam API URL")
@@ -76,6 +81,8 @@ func (config *ApiConfig) GetFriendList(steamid string) (FriendsList, error) {
 		return FriendsList{}, err
 	}
 
+	config.FriendsListCache.UpdateCache(steamid, body.FriendsList)
+
 	return body.FriendsList, nil
 }
 
@@ -97,6 +104,12 @@ type SummariesResponse struct {
 }
 
 func (config *ApiConfig) GetPlayerSummaries(steamids []string) (Summaries, error) {
+	joinedIDs := strings.Join(steamids, ",")
+	if config.SummariesCache.IsCacheHit(joinedIDs) {
+		log.Println("Summaries cache hit for", joinedIDs)
+		return config.SummariesCache.Cache[joinedIDs].Data, nil
+	}
+
 	base, err := url.Parse(steamBaseURL)
 	if err != nil {
 		return Summaries{}, errors.New("Failed to parse steam API URL")
@@ -105,7 +118,7 @@ func (config *ApiConfig) GetPlayerSummaries(steamids []string) (Summaries, error
 
 	query := url.Values{}
 	query.Set("key", config.SteamApiKey)
-	query.Set("steamids", strings.Join(steamids, ","))
+	query.Set("steamids", joinedIDs)
 
 	base.RawQuery = query.Encode()
 
@@ -122,6 +135,8 @@ func (config *ApiConfig) GetPlayerSummaries(steamids []string) (Summaries, error
 	if err != nil {
 		return Summaries{}, err
 	}
+
+	config.SummariesCache.UpdateCache(joinedIDs, body.Response)
 
 	return body.Response, nil
 }
@@ -143,6 +158,11 @@ type OwnedGamesResponse struct {
 }
 
 func (config *ApiConfig) GetOwnedGames(steamid string) (OwnedGames, error) {
+	if config.OwnedGamesCache.IsCacheHit(steamid) {
+		log.Println("OwnedGames cache hit for", steamid)
+		return config.OwnedGamesCache.Cache[steamid].Data, nil
+	}
+
 	base, err := url.Parse(steamBaseURL)
 	if err != nil {
 		return OwnedGames{}, errors.New("Failed to parse steam API URL")
@@ -179,6 +199,8 @@ func (config *ApiConfig) GetOwnedGames(steamid string) (OwnedGames, error) {
 	}
 
 	body.Response.SteamID = steamid
+
+	config.OwnedGamesCache.UpdateCache(steamid, body.Response)
 
 	return body.Response, nil
 
