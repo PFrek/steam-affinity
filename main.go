@@ -33,9 +33,13 @@ func main() {
 		ReadHeaderTimeout: 2 * time.Second,
 	}
 
-	apiV1baseURL := "/api/v1/friends"
+	apiV1baseURL := "/api/v1"
 
-	mux.HandleFunc(apiV1baseURL, config.GetFriendsHandler)
+	mux.HandleFunc(apiV1baseURL+"/friends", config.GetFriendsHandler)
+	mux.HandleFunc(apiV1baseURL+"/summaries", config.GetSummariesHandler)
+	mux.HandleFunc(apiV1baseURL+"/ownedGames", config.GetOwnedGamesHandler)
+	mux.HandleFunc(apiV1baseURL+"/ownedGames/compare", config.GetComparisonHandler)
+	mux.HandleFunc(apiV1baseURL+"/friends/ranking", config.GetAffinityRanking)
 
 	log.Println("Starting server on port", port)
 	server.ListenAndServe()

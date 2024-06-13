@@ -1,10 +1,14 @@
 package api
 
 import (
+	"cmp"
 	"encoding/json"
 	"errors"
 	"log"
 	"net/http"
+	"slices"
+	"strings"
+	"sync"
 )
 
 type ApiConfig struct {
@@ -68,6 +72,188 @@ func (config *ApiConfig) GetFriendsHandler(w http.ResponseWriter, req *http.Requ
 		return
 	}
 
+	friendsIDs := friends.ExtractIds()
+
+	summaries, err := config.GetPlayerSummaries(friendsIDs)
+	if err != nil {
+		logRequest(req, 500)
+		RespondWithError(w, 500, err.Error())
+		return
+	}
+
 	logRequest(req, 200)
-	RespondWithJSON(w, 200, friends)
+	RespondWithJSON(w, 200, summaries)
+}
+
+func (config *ApiConfig) GetSummariesHandler(w http.ResponseWriter, req *http.Request) {
+	ids := req.URL.Query().Get("steamids")
+	if ids == "" {
+		logRequest(req, 400)
+		RespondWithError(w, 400, "Query param 'steamids' is required")
+		return
+	}
+
+	summaries, err := config.GetPlayerSummaries(strings.Split(ids, ","))
+	if err != nil {
+		logRequest(req, 500)
+		RespondWithError(w, 500, err.Error())
+		return
+	}
+
+	logRequest(req, 200)
+	RespondWithJSON(w, 200, summaries)
+}
+
+func (config *ApiConfig) GetOwnedGamesHandler(w http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("steamid")
+	if id == "" {
+		logRequest(req, 400)
+		RespondWithError(w, 400, "Query param 'steamid' is required")
+		return
+	}
+
+	ownedGames, err := config.GetOwnedGames(id)
+	if err != nil {
+		if errors.Is(err, InvalidSteamIDError{}) {
+			logRequest(req, 400)
+			RespondWithError(w, 400, err.Error())
+			return
+		}
+
+		logRequest(req, 500)
+		RespondWithError(w, 500, err.Error())
+		return
+	}
+
+	logRequest(req, 200)
+	RespondWithJSON(w, 200, ownedGames)
+}
+
+func (config *ApiConfig) GetComparisonHandler(w http.ResponseWriter, req *http.Request) {
+	player1ID := req.URL.Query().Get("player1")
+	player2ID := req.URL.Query().Get("player2")
+	if player1ID == "" {
+		logRequest(req, 400)
+		RespondWithError(w, 400, "Query param 'player1' is required")
+		return
+	}
+	if player2ID == "" {
+		logRequest(req, 400)
+		RespondWithError(w, 400, "Query param 'player2' is required")
+		return
+	}
+
+	player1Games, err := config.GetOwnedGames(player1ID)
+	if err != nil {
+		if errors.Is(err, InvalidSteamIDError{}) {
+			logRequest(req, 400)
+			RespondWithError(w, 400, err.Error())
+			return
+		}
+
+		logRequest(req, 500)
+		RespondWithError(w, 500, err.Error())
+		return
+	}
+
+	player2Games, err := config.GetOwnedGames(player2ID)
+	if err != nil {
+		if errors.Is(err, InvalidSteamIDError{}) {
+			logRequest(req, 400)
+			RespondWithError(w, 400, err.Error())
+			return
+		}
+
+		logRequest(req, 500)
+		RespondWithError(w, 500, err.Error())
+		return
+	}
+
+	result := player1Games.CompareOwnedGames(player2Games, true)
+
+	logRequest(req, 200)
+	RespondWithJSON(w, 200, result)
+}
+
+func (config *ApiConfig) GetAffinityRanking(w http.ResponseWriter, req *http.Request) {
+	steamid := req.URL.Query().Get("steamid")
+	if steamid == "" {
+		logRequest(req, 400)
+		RespondWithError(w, 400, "Query param 'steamid' is required")
+		return
+	}
+
+	listGames := false
+	listGamesQuery := req.URL.Query().Get("listGames")
+	if listGamesQuery == "true" {
+		listGames = true
+	}
+
+	ownedGames, err := config.GetOwnedGames(steamid)
+	if err != nil {
+		if errors.Is(err, InvalidSteamIDError{}) {
+			logRequest(req, 400)
+			RespondWithError(w, 400, err.Error())
+			return
+		}
+
+		logRequest(req, 500)
+		RespondWithError(w, 500, err.Error())
+		return
+	}
+
+	friendsList, err := config.GetFriendList(steamid)
+	if err != nil {
+		if errors.Is(err, InvalidSteamIDError{}) {
+			logRequest(req, 400)
+			RespondWithError(w, 400, err.Error())
+			return
+		}
+
+		logRequest(req, 500)
+		RespondWithError(w, 500, err.Error())
+		return
+	}
+
+	wg := sync.WaitGroup{}
+	results := []CompareResult{}
+
+	for _, friend := range friendsList.Friends {
+		wg.Add(1)
+		go func(friend Friend) {
+			defer wg.Done()
+
+			friendsGames, err := config.GetOwnedGames(friend.SteamID)
+			if err != nil {
+				if errors.Is(err, InvalidSteamIDError{}) {
+					logRequest(req, 400)
+					RespondWithError(w, 400, err.Error())
+					return
+				}
+
+				logRequest(req, 500)
+				RespondWithError(w, 500, err.Error())
+				return
+			}
+
+			result := ownedGames.CompareOwnedGames(friendsGames, listGames)
+
+			results = append(results, result)
+		}(friend)
+	}
+
+	wg.Wait()
+
+	slices.SortFunc(results, func(a CompareResult, b CompareResult) int {
+		return cmp.Compare(b.AffinityAvg, a.AffinityAvg)
+	})
+
+	response := struct {
+		Ranking []CompareResult `json:"ranking"`
+	}{
+		Ranking: results,
+	}
+
+	logRequest(req, 200)
+	RespondWithJSON(w, 200, response)
 }
