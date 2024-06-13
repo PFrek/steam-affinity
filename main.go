@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/PFrek/steam-affinity/internal/api"
 	"github.com/PFrek/steam-affinity/internal/urls"
 	"github.com/joho/godotenv"
 )
@@ -16,8 +17,12 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	_ = os.Getenv("STEAM_APIKEY")
+	steamApiKey := os.Getenv("STEAM_APIKEY")
 	port := os.Getenv("PORT")
+
+	config := api.ApiConfig{
+		SteamApiKey: steamApiKey,
+	}
 
 	mux := http.NewServeMux()
 
@@ -29,11 +34,8 @@ func main() {
 		ReadHeaderTimeout: 2 * time.Second,
 	}
 
-	apiV1baseURL := urls.URLChain{URL: "/api/v1/users"}
-	mux.HandleFunc(apiV1baseURL.URL, func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(200)
-		w.Write([]byte("Hi"))
-	})
+	apiV1baseURL := urls.URLChain{URL: "/api/v1/friends"}
+	mux.HandleFunc(apiV1baseURL.URL, config.GetFriendsHandler)
 
 	log.Println("Starting server on port", port)
 	server.ListenAndServe()
