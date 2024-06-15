@@ -1,0 +1,12 @@
+.container {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+
+	color: white;
+	background-color: rgb(20, 20, 60);
+}
+
+.avatar {
+	margin: 10px 30px;
+}
