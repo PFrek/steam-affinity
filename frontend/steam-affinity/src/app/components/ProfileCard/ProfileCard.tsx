@@ -1,24 +1,33 @@
 import Image from "next/image"
 import { getPlayerSummaries } from "../../actions/actions"
-import { PlayerAffinity, PlayerSummary } from "../../definitions/types"
+import { AffinityBoundaries, PlayerAffinity, PlayerSummary } from "../../definitions/types"
 import styles from "./ProfileCard.module.css"
 import AffinityInfo from "./AffinityInfo/AffinityInfo"
+import { Color, getColorForValue } from "@/app/helpers/colorLerp"
 
-export default async function ProfileCard({ steamid, affinity }: { steamid: string, affinity: PlayerAffinity | null }) {
-  let player: PlayerSummary = {
-    steamid: "unknownID",
-    communityvisibilityState: 0,
-    personaname: "unknownUsername",
-    avatar: "unknown_user.png",
-    avatarmedium: "unknown_user.png",
-    avatarfull: "unknown_user.png"
+export default async function ProfileCard({ summary, affinity, affinityBoundaries }
+  : {
+    summary: PlayerSummary,
+    affinity: PlayerAffinity | null,
+    affinityBoundaries: AffinityBoundaries,
+  }) {
+  let player: PlayerSummary = summary;
+
+  let lowColor: Color = {
+    r: 255,
+    g: 0,
+    b: 0,
+  };
+
+  let highColor: Color = {
+    r: 0,
+    g: 255,
+    b: 0,
   }
 
-  let playerSummaries = await getPlayerSummaries(steamid);
-
-
-  if (playerSummaries.length > 0) {
-    player = playerSummaries[0]
+  let affinityColor: Color = highColor;
+  if (affinity != null) {
+    affinityColor = getColorForValue(affinity?.affinity, affinityBoundaries.min, affinityBoundaries.max, lowColor, highColor);
   }
 
   return (
@@ -29,7 +38,7 @@ export default async function ProfileCard({ steamid, affinity }: { steamid: stri
       </div>
 
       {affinity != null ?
-        <AffinityInfo affinity={affinity} />
+        <AffinityInfo affinity={affinity} color={affinityColor} />
         :
         <></>}
     </div >

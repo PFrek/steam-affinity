@@ -17,3 +17,8 @@ export interface PlayerAffinity {
 	player2Ratio: number;
 	matches: number;
 }
+
+export interface AffinityBoundaries {
+	min: number;
+	max: number;
+}
