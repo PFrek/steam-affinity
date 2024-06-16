@@ -48,6 +48,27 @@ func main() {
 			CacheRenew: gamesCacheRenew * time.Minute,
 		},
 	}
+	// Cache cleaners
+	friendsCleaner := api.Cleaner[api.FriendsList]{
+		Name:     "FriendsCache",
+		Cache:    &config.FriendsListCache,
+		Interval: 1 * time.Hour,
+	}
+	friendsCleaner.Start()
+
+	playersCleaner := api.Cleaner[api.Player]{
+		Name:     "PlayersCache",
+		Cache:    &config.PlayersCache,
+		Interval: 1 * time.Hour,
+	}
+	playersCleaner.Start()
+
+	ownedGamesCleaner := api.Cleaner[api.OwnedGames]{
+		Name:     "OwnedGamesCache",
+		Cache:    &config.OwnedGamesCache,
+		Interval: 1 * time.Hour,
+	}
+	ownedGamesCleaner.Start()
 
 	mux := http.NewServeMux()
 

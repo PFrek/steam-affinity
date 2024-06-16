@@ -231,7 +231,9 @@ type CompareResult struct {
 	Similarity    float64 `json:"similarity"`
 	Weight        float64 `json:"weight"`
 	Player1ID     string  `json:"player1ID"`
+	Player1Ratio  float64 `json:"player1Ratio"`
 	Player2ID     string  `json:"player2ID"`
+	Player2Ratio  float64 `json:"player2Ratio"`
 	Matches       int     `json:"matches"`
 	MatchingGames []Game  `json:"matching_games"`
 }
@@ -248,12 +250,14 @@ func (player1Games OwnedGames) CompareOwnedGames(player2Games OwnedGames, listGa
 			result.MatchingGames = append(result.MatchingGames, game)
 		}
 	}
+	result.Matches = len(result.MatchingGames)
+
+	result.Player1Ratio = float64(result.Matches) / float64(player1Games.GameCount)
+	result.Player2Ratio = float64(result.Matches) / float64(player2Games.GameCount)
 
 	result.Similarity = float64(len(result.MatchingGames)) / float64(player1Games.GameCount+player2Games.GameCount)
 	result.Weight = (2.0 * float64(player1Games.GameCount) * float64(player2Games.GameCount)) / (float64(player1Games.GameCount) + float64(player2Games.GameCount))
 	result.Affinity = result.Similarity * result.Weight
-
-	result.Matches = len(result.MatchingGames)
 
 	if !listGames {
 		result.MatchingGames = nil
