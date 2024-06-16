@@ -15,7 +15,7 @@ type ApiConfig struct {
 	SteamApiKey string
 
 	FriendsListCache Cache[FriendsList]
-	SummariesCache   Cache[Summaries]
+	PlayersCache     Cache[Player]
 	OwnedGamesCache  Cache[OwnedGames]
 }
 

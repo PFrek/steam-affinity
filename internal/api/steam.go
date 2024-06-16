@@ -1,6 +1,7 @@
 package api
 
 import (
+	"cmp"
 	"encoding/json"
 	"errors"
 	"io"
@@ -103,11 +104,27 @@ type SummariesResponse struct {
 }
 
 func (config *ApiConfig) GetPlayerSummaries(steamids []string) (Summaries, error) {
-	joinedIDs := strings.Join(steamids, ",")
-	if config.SummariesCache.IsCacheHit(joinedIDs) {
-		log.Println("Summaries cache hit for", joinedIDs)
-		return config.SummariesCache.Cache[joinedIDs].Data, nil
+	uncachedIDs := []string{}
+	cachedPlayers := []Player{}
+	for _, id := range steamids {
+		if config.PlayersCache.IsCacheHit(id) {
+			log.Println("Cache hit for id:", id)
+			cachedPlayers = append(cachedPlayers, config.PlayersCache.ReadCache(id))
+		} else {
+			uncachedIDs = append(uncachedIDs, id)
+		}
 	}
+
+	if len(uncachedIDs) == 0 {
+		slices.SortFunc(cachedPlayers, func(a Player, b Player) int {
+			return cmp.Compare(a.SteamID, b.SteamID)
+		})
+		return Summaries{
+			Players: cachedPlayers,
+		}, nil
+	}
+
+	joinedIDs := strings.Join(uncachedIDs, ",")
 
 	base, err := url.Parse(steamBaseURL)
 	if err != nil {
@@ -135,7 +152,11 @@ func (config *ApiConfig) GetPlayerSummaries(steamids []string) (Summaries, error
 		return Summaries{}, err
 	}
 
-	config.SummariesCache.UpdateCache(joinedIDs, body.Response)
+	returnedPlayers := body.Response.Players
+	for _, player := range returnedPlayers {
+		log.Println("Adding player to cache with id:", player.SteamID)
+		config.PlayersCache.UpdateCache(player.SteamID, player)
+	}
 
 	return body.Response, nil
 }

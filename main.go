@@ -30,7 +30,7 @@ func main() {
 	port := os.Getenv("PORT")
 
 	friendsCacheRenew := time.Duration(TryAtoi(os.Getenv("FRIENDS_CACHE_RENEW"), 5))
-	summariesCacheRenew := time.Duration(TryAtoi(os.Getenv("SUMMARIES_CACHE_RENEW"), 1440))
+	playersCacheRenew := time.Duration(TryAtoi(os.Getenv("SUMMARIES_CACHE_RENEW"), 1440))
 	gamesCacheRenew := time.Duration(TryAtoi(os.Getenv("GAMES_CACHE_RENEW"), 30))
 
 	config := api.ApiConfig{
@@ -39,9 +39,9 @@ func main() {
 			Cache:      map[string]api.CacheEntry[api.FriendsList]{},
 			CacheRenew: friendsCacheRenew * time.Minute,
 		},
-		SummariesCache: api.Cache[api.Summaries]{
-			Cache:      map[string]api.CacheEntry[api.Summaries]{},
-			CacheRenew: summariesCacheRenew * time.Minute,
+		PlayersCache: api.Cache[api.Player]{
+			Cache:      map[string]api.CacheEntry[api.Player]{},
+			CacheRenew: playersCacheRenew * time.Minute,
 		},
 		OwnedGamesCache: api.Cache[api.OwnedGames]{
 			Cache:      map[string]api.CacheEntry[api.OwnedGames]{},

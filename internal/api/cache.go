@@ -12,7 +12,7 @@ type CacheEntry[V any] struct {
 
 type Cache[V any] struct {
 	Cache      map[string]CacheEntry[V]
-	mu         sync.Mutex
+	mu         sync.RWMutex
 	CacheRenew time.Duration
 }
 
@@ -41,4 +41,11 @@ func (cache *Cache[V]) UpdateCache(steamid string, data V) {
 	entry.Data = data
 	entry.CachedAt = time.Now().UTC()
 	cache.Cache[steamid] = entry
+}
+
+func (cache *Cache[V]) ReadCache(steamid string) V {
+	cache.mu.RLock()
+	defer cache.mu.RUnlock()
+
+	return cache.Cache[steamid].Data
 }
