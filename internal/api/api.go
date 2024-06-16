@@ -147,6 +147,12 @@ func (config *ApiConfig) GetComparisonHandler(w http.ResponseWriter, req *http.R
 		return
 	}
 
+	listGames := false
+	listGamesQuery := req.URL.Query().Get("listGames")
+	if listGamesQuery == "true" {
+		listGames = true
+	}
+
 	player1Games, err := config.GetOwnedGames(player1ID)
 	if err != nil {
 		if errors.Is(err, InvalidSteamIDError{}) {
@@ -173,7 +179,7 @@ func (config *ApiConfig) GetComparisonHandler(w http.ResponseWriter, req *http.R
 		return
 	}
 
-	result := player1Games.CompareOwnedGames(player2Games, true)
+	result := player1Games.CompareOwnedGames(player2Games, listGames)
 
 	logRequest(req, 200)
 	RespondWithJSON(w, 200, result)
@@ -256,7 +262,7 @@ func (config *ApiConfig) GetAffinityRanking(w http.ResponseWriter, req *http.Req
 	}
 
 	slices.SortFunc(results, func(a CompareResult, b CompareResult) int {
-		return cmp.Compare(b.AffinityAvg, a.AffinityAvg)
+		return cmp.Compare(b.Affinity, a.Affinity)
 	})
 
 	response := struct {

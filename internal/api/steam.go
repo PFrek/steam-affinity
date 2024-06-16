@@ -5,7 +5,6 @@ import (
 	"errors"
 	"io"
 	"log"
-	"math"
 	"net/http"
 	"net/url"
 	"slices"
@@ -207,9 +206,9 @@ func (config *ApiConfig) GetOwnedGames(steamid string) (OwnedGames, error) {
 }
 
 type CompareResult struct {
-	AffinityAvg   float64 `json:"affinity_avg"`
-	Affinity1     float64 `json:"affinity_1"`
-	Affinity2     float64 `json:"affinity_2"`
+	Affinity      float64 `json:"affinity"`
+	Similarity    float64 `json:"similarity"`
+	Weight        float64 `json:"weight"`
 	Player1ID     string  `json:"player1ID"`
 	Player2ID     string  `json:"player2ID"`
 	Matches       int     `json:"matches"`
@@ -229,11 +228,9 @@ func (player1Games OwnedGames) CompareOwnedGames(player2Games OwnedGames, listGa
 		}
 	}
 
-	result.Affinity1 = GetAffinity(result.MatchingGames, player1Games)
-	result.Affinity2 = GetAffinity(result.MatchingGames, player2Games)
-	result.AffinityAvg = (result.Affinity1 + result.Affinity2) / 2.0
-	diffFactor := (1.0 - math.Abs(result.Affinity1-result.Affinity2))
-	result.AffinityAvg *= diffFactor
+	result.Similarity = float64(len(result.MatchingGames)) / float64(player1Games.GameCount+player2Games.GameCount)
+	result.Weight = (2.0 * float64(player1Games.GameCount) * float64(player2Games.GameCount)) / (float64(player1Games.GameCount) + float64(player2Games.GameCount))
+	result.Affinity = result.Similarity * result.Weight
 
 	result.Matches = len(result.MatchingGames)
 
