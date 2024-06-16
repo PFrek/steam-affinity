@@ -1,12 +1,24 @@
 .container {
 	display: flex;
-	justify-content: flex-start;
-	align-items: center;
+	justify-content: space-between;
 
 	color: white;
 	background-color: rgb(20, 20, 60);
+
+	padding: 2px 15px;
+	margin: 5px;
+}
+
+.profileSection {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
 }
 
 .avatar {
 	margin: 10px 30px;
+}
+
+.personaname {
+	font-size: 1.5rem;
 }

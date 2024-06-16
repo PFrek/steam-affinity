@@ -32,6 +32,10 @@ a {
   text-decoration: none;
 }
 
+ul {
+  list-style-type: none;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

@@ -1,11 +1,10 @@
 import Image from "next/image"
 import { getPlayerSummaries } from "../../actions/actions"
-import { PlayerSummary } from "../../definitions/types"
+import { PlayerAffinity, PlayerSummary } from "../../definitions/types"
 import styles from "./ProfileCard.module.css"
+import AffinityInfo from "./AffinityInfo/AffinityInfo"
 
-export default async function ProfileCard({ steamID }: { steamID: string }) {
-  const playerSummaries = await getPlayerSummaries(steamID)
-
+export default async function ProfileCard({ steamid, affinity }: { steamid: string, affinity: PlayerAffinity | null }) {
   let player: PlayerSummary = {
     steamid: "unknownID",
     communityvisibilityState: 0,
@@ -15,14 +14,24 @@ export default async function ProfileCard({ steamID }: { steamID: string }) {
     avatarfull: "unknown_user.png"
   }
 
+  let playerSummaries = await getPlayerSummaries(steamid);
+
+
   if (playerSummaries.length > 0) {
     player = playerSummaries[0]
   }
 
   return (
     <div className={styles.container}>
-      <Image className={styles.avatar} src={player.avatarmedium} width={50} height={50} alt="Profile picture" />
-      <h2 className={styles.personaname}>{player.personaname}</h2>
-    </div>
+      <div className={styles.profileSection}>
+        <Image className={styles.avatar} src={player.avatarmedium} width={50} height={50} alt="Profile picture" />
+        <p className={styles.personaname}>{player.personaname}</p>
+      </div>
+
+      {affinity != null ?
+        <AffinityInfo affinity={affinity} />
+        :
+        <></>}
+    </div >
   )
 }

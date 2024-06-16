@@ -1,0 +1,19 @@
+.container {
+	width: 50%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.ratioOwned {
+	margin-right: 10px;
+}
+
+.percent {
+	color: green;
+}
+
+.affinity {
+	font-size: 2rem;
+	margin-right: 20px;
+}

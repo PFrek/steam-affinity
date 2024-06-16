@@ -1,3 +1,6 @@
 .header {
-  color: #f3f3f3;
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
 }
+
