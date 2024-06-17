@@ -22,3 +22,8 @@
 .personaname {
 	font-size: 1.5rem;
 }
+
+.error {
+	align-self: center;
+	color: red;
+}

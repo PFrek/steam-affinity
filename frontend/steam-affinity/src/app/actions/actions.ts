@@ -65,7 +65,9 @@ export async function getAffinityRanking(steamid: string): Promise<PlayerAffinit
 
 		let json = await resp.json();
 
-		ranking = json.ranking;
+		if (json.ranking != undefined) {
+			ranking = json.ranking;
+		}
 
 	} catch (e) {
 		console.log(`Failed to get affinity ranking: ${e}`);

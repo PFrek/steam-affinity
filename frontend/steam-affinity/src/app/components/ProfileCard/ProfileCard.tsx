@@ -37,10 +37,9 @@ export default async function ProfileCard({ summary, affinity, affinityBoundarie
         <p className={styles.personaname}>{player.personaname}</p>
       </div>
 
-      {affinity != null ?
-        <AffinityInfo affinity={affinity} color={affinityColor} />
+      {affinity == null || affinity.player2GamesCount == 0 ? <></>
         :
-        <></>}
+        <AffinityInfo affinity={affinity} color={affinityColor} />}
     </div >
   )
 }

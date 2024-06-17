@@ -14,6 +14,7 @@ export default async function FriendsList({ steamid }: { steamid: string }) {
 	};
 
 	let steamids: string[] = [];
+
 	affinities.forEach((entry) => {
 		steamids.push(entry.player2ID);
 

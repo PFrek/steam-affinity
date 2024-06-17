@@ -1,6 +1,6 @@
 export interface PlayerSummary {
 	steamid: string;
-	communityvisibilityState: number;
+	communityvisibilitystate: number;
 	personaname: string;
 	avatar: string;
 	avatarmedium: string;
@@ -15,6 +15,7 @@ export interface PlayerAffinity {
 	player1Ratio: number;
 	player2ID: string;
 	player2Ratio: number;
+	player2GamesCount: number;
 	matches: number;
 }
 
