@@ -21,13 +21,18 @@ func TryAtoi(s string, defaultValue int) int {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	_ = godotenv.Load()
 
 	steamApiKey := os.Getenv("STEAM_APIKEY")
+	if steamApiKey == "" {
+		log.Fatal("No Steam API Key found in .env or environment variables")
+	}
+
 	port := os.Getenv("PORT")
+	if port == "" {
+		log.Println("No port provided, defaulting to 8080")
+		port = "8080"
+	}
 
 	friendsCacheRenew := time.Duration(TryAtoi(os.Getenv("FRIENDS_CACHE_RENEW"), 5))
 	playersCacheRenew := time.Duration(TryAtoi(os.Getenv("SUMMARIES_CACHE_RENEW"), 1440))

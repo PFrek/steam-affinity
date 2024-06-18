@@ -1,1 +1,1 @@
-go build -o out && ./out
+go build -o server && ./server

@@ -1,0 +1,10 @@
+FROM debian:stable-slim
+
+COPY server bin/server
+
+ENV PORT 8080
+ENV FRIENDS_CACHE_RENEW 5
+ENV SUMMARIES_CACHE_RENEW 1440
+ENV GAMES_CACHE_RENEW 30
+
+CMD ["/bin/server"]
