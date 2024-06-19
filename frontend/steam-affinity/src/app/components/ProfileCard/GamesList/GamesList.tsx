@@ -59,6 +59,7 @@ export default function GamesList({ games, listType, setMatchingGamesDisplay, se
             </a>
           )
         })}
+        {(games === null || games.length === 0) && <p>No games found</p>}
       </div>
     </div>
   )
