@@ -237,6 +237,7 @@ type CompareResult struct {
 	Player2GamesCount int     `json:"player2GamesCount"`
 	Matches           int     `json:"matches"`
 	MatchingGames     []Game  `json:"matching_games"`
+	Player2OnlyGames  []Game  `json:"player2OnlyGames"`
 }
 
 func (player1Games OwnedGames) CompareOwnedGames(player2Games OwnedGames, listGames bool) CompareResult {
@@ -246,9 +247,13 @@ func (player1Games OwnedGames) CompareOwnedGames(player2Games OwnedGames, listGa
 	}
 
 	result.MatchingGames = []Game{}
-	for _, game := range player1Games.Games {
-		if slices.Contains(player2Games.Games, game) {
+	result.Player2OnlyGames = []Game{}
+
+	for _, game := range player2Games.Games {
+		if slices.Contains(player1Games.Games, game) {
 			result.MatchingGames = append(result.MatchingGames, game)
+		} else {
+			result.Player2OnlyGames = append(result.Player2OnlyGames, game)
 		}
 	}
 	result.Matches = len(result.MatchingGames)
@@ -270,6 +275,7 @@ func (player1Games OwnedGames) CompareOwnedGames(player2Games OwnedGames, listGa
 
 	if !listGames {
 		result.MatchingGames = nil
+		result.Player2OnlyGames = nil
 	}
 
 	return result
