@@ -41,7 +41,7 @@ export default async function FriendsList({ steamid }: { steamid: string }) {
 		<div className={styles.container}>
 			<div className={styles.header}>
 				<h2 className={styles.title}>Friends</h2>
-				<h2 className={styles.title}>Affinity</h2>
+				<h2 className={styles.affinity}>Affinity</h2>
 			</div>
 			{affinities.length == 0 ?
 				<p>No friends found</p>

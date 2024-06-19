@@ -41,8 +41,8 @@ export default function ProfileCard({ summary, affinity, affinityBoundaries }
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header} onClick={toggleExpand}>
+    <div className={styles.container} onClick={toggleExpand}>
+      <div className={styles.header}>
         <div className={styles.profileSection}>
           <Image className={styles.avatar} src={summary.avatarmedium} width={50} height={50} alt="Profile picture" />
           <p className={styles.personaname}>{summary.personaname}</p>

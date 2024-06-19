@@ -23,7 +23,7 @@ export default function GamesList({ games }: { games: Game[] }) {
       <div className={styles.list}>
         {games.map((game) => {
           return (
-            <a className={styles.game} href={`https://store.steampowered.com/app/${game.appid}/`} target="_blank">
+            <a className={styles.game} href={`https://store.steampowered.com/app/${game.appid}/`} target="_blank" rel="noopener">
               <GameIcon game={game} width={iconWidth} height={iconHeight} />
               <p>{game.name}</p>
             </a>

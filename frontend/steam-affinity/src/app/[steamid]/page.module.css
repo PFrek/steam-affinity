@@ -1,11 +1,30 @@
 .header {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin: 40px;
+}
+
+.main {
   margin: 20px;
 }
 
 .error {
   margin: 50px;
   font-size: 2rem;
+  color: red;
 }
 
+.homeButton {
+  font-size: 1.2rem;
+  border: 5px solid var(--accent-dark-rgb);
+  background-color: var(--accent-dark-rgb);
+  border-radius: 15%;
+  padding: 15px;
+  text-align: center;
+}
+
+.homeButton:hover {
+  border-color: var(--accent-light-rgb);
+  background-color: var(--accent-light-rgb);
+}

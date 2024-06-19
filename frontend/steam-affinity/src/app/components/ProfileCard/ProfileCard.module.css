@@ -1,21 +1,17 @@
 .container {
 	display: flex;
 	flex-direction: column;
-
-	color: white;
-
-
 	padding: 2px 15px;
+}
+
+.container:hover {
+	cursor: pointer;
 }
 
 .header {
 	display: flex;
 	justify-content: space-between;
-	background-color: rgb(20, 20, 60);
-}
-
-.header:hover {
-	cursor: pointer;
+	background-color: var(--accent-dark-rgb);
 }
 
 .profileSection {
@@ -35,4 +31,11 @@
 .error {
 	align-self: center;
 	color: red;
+}
+
+@media only screen and (max-width: 768px) {
+	.header {
+		flex-direction: column;
+	}
+
 }

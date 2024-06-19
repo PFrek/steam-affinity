@@ -1,7 +1,8 @@
 :root {
   --foreground-rgb: rgb(200, 200, 200);
-  --background-start-rgb: rgb(255, 255, 255);
-  --background-end-rgb: rgb(0, 0, 0);
+  --background-rgb: rgb(25, 25, 25);
+  --accent-dark-rgb: rgb(30, 40, 80);
+  --accent-light-rgb: rgb(60, 80, 120);
 }
 
 
@@ -18,13 +19,8 @@ body {
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: var(--foreground-rgb);
+  background-color: var(--background-rgb)
 }
 
 a {
