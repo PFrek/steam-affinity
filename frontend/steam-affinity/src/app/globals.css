@@ -3,6 +3,9 @@
   --background-rgb: rgb(25, 25, 25);
   --accent-dark-rgb: rgb(30, 40, 80);
   --accent-light-rgb: rgb(60, 80, 120);
+
+  --error-light-rgb: rgb(120, 60, 60);
+  --error-dark-rgb: rgb(80, 20, 20);
 }
 
 

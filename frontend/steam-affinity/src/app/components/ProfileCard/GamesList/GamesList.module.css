@@ -4,13 +4,17 @@
 	align-items: center;
 	padding: 20px 10px;
 	background-color: var(--accent-light-rgb);
+
+	max-height: 60vh;
 }
 
 .list {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	gap: 15px;
-	padding: 10px;
+	padding: 20px;
+
+	overflow-y: scroll;
 }
 
 .game {
@@ -27,6 +31,47 @@
 .game:hover {
 	background-color: var(--accent-dark-rgb);
 	cursor: pointer;
+}
+
+.buttonsContainer {
+	display: flex;
+	gap: 10px;
+
+	margin-bottom: 15px;
+}
+
+.button {
+	padding: 10px 20px;
+	border-radius: 15px;
+}
+
+.active {
+	background-color: var(--accent-dark-rgb);
+}
+
+.activeMissing {
+	background-color: var(--error-dark-rgb);
+	border-color: var(--error-light-rgb);
+}
+
+.button:hover {
+	cursor: pointer;
+}
+
+.button:disabled:hover {
+	cursor: default;
+}
+
+.missingList {
+	background-color: var(--error-light-rgb);
+}
+
+.missingEntry {
+	border-color: var(--error-dark-rgb);
+}
+
+.missingEntry:hover {
+	background-color: var(--error-dark-rgb);
 }
 
 @media only screen and (max-width: 1280px) {

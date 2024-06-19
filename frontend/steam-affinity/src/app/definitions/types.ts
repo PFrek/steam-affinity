@@ -22,6 +22,7 @@ export interface PlayerAffinity {
 	player2ID: string;
 	player2Ratio: number;
 	player2GamesCount: number;
+	player2OnlyGames: Game[];
 	matches: number;
 	matching_games: Game[];
 }

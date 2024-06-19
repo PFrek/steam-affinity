@@ -12,7 +12,7 @@
 .error {
   margin: 50px;
   font-size: 2rem;
-  color: red;
+  color: var(--error-rgb);
 }
 
 .homeButton {

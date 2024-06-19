@@ -30,7 +30,7 @@ export default function GameIcon({ game, width, height }: { game: Game, width: n
         width={width} height={height}
         blurDataURL={blurDataURL}
         placeholder="blur"
-        onError={(e) => { setFailedLoad(true) }} />
+        onError={() => { setFailedLoad(true) }} />
 
   )
 }
