@@ -39,17 +39,24 @@ export default async function FriendsList({ steamid }: { steamid: string }) {
 
 	return (
 		<div className={styles.container}>
-			<h2 className={styles.title}>Friends</h2>
+			<div className={styles.header}>
+				<h2 className={styles.title}>Friends</h2>
+				<h2 className={styles.title}>Affinity</h2>
+			</div>
 			{affinities.length == 0 ?
 				<p>No friends found</p>
 				: <ul>
 					{affinities.map((entry) => {
-						return <li key={entry.player2ID}>
-							<ProfileCard
-								affinity={entry}
-								summary={players[entry.player2ID]}
-								affinityBoundaries={boundaries} />
-						</li>
+						const summary = players[entry.player2ID];
+
+						return (summary ?
+							<li key={entry.player2ID}>
+								<ProfileCard
+									affinity={entry}
+									summary={players[entry.player2ID]}
+									affinityBoundaries={boundaries} />
+							</li>
+							: <></>)
 					})}
 				</ul>
 

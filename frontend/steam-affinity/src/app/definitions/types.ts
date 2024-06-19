@@ -7,6 +7,12 @@ export interface PlayerSummary {
 	avatarfull: string;
 }
 
+export interface Game {
+	appid: number;
+	name: string;
+	img_icon_url: string;
+}
+
 export interface PlayerAffinity {
 	affinity: number;
 	similarity: number;
@@ -17,6 +23,7 @@ export interface PlayerAffinity {
 	player2Ratio: number;
 	player2GamesCount: number;
 	matches: number;
+	matching_games: Game[];
 }
 
 export interface AffinityBoundaries {

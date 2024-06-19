@@ -53,6 +53,7 @@ export async function getFriendsList(steamid: string): Promise<PlayerSummary[]> 
 export async function getAffinityRanking(steamid: string): Promise<PlayerAffinity[]> {
 	const url = new URL("friends/ranking", baseURL);
 	url.searchParams.set("steamid", steamid);
+	url.searchParams.set("listGames", "true");
 
 	let ranking: PlayerAffinity[] = [];
 

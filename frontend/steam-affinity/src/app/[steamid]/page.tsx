@@ -1,4 +1,3 @@
-import Image from "next/image";
 import styles from "./page.module.css";
 import ProfileCard from "../components/ProfileCard/ProfileCard";
 import { getPlayerSummaries } from "../actions/actions";

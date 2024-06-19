@@ -1,12 +1,21 @@
 .container {
 	display: flex;
-	justify-content: space-between;
+	flex-direction: column;
 
 	color: white;
-	background-color: rgb(20, 20, 60);
+
 
 	padding: 2px 15px;
-	margin: 5px;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	background-color: rgb(20, 20, 60);
+}
+
+.header:hover {
+	cursor: pointer;
 }
 
 .profileSection {

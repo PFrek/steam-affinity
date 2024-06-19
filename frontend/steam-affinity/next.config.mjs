@@ -6,6 +6,11 @@ const nextConfig = {
 				protocol: "https",
 				hostname: "avatars.steamstatic.com",
 				port: "",
+			},
+			{
+				protocol: "http",
+				hostname: "media.steampowered.com",
+				port: "",
 			}
 		]
 	}
