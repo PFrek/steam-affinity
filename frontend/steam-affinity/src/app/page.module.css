@@ -4,3 +4,44 @@
   margin: 20px;
 }
 
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 15px;
+
+  padding: 15px;
+  background-color: var(--accent-dark-rgb);
+  border-radius: 15px;
+
+  width: 70%;
+
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.form label {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.form input {
+  width: 30%;
+}
+
+.form button {
+  width: 10%;
+}
+
+.formula {
+  font-style: italic;
+  background-color: vaR(--accent-light-rgb);
+  margin: 0px 20px;
+  width: 50%;
+  padding: 5px;
+}
