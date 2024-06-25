@@ -81,6 +81,15 @@ export default function Home() {
             Weight<sub>A,B</sub> = (2 ⋅ N<sub>A</sub> ⋅ N<sub>B</sub>) / (N<sub>A</sub> + N<sub>B</sub>)
           </p>
         </div>
+        <div className={styles.section}>
+          <h2>Limitations</h2>
+          <p>
+            Since this website uses the public Steam API to get the users' game libraries and friends lists, it is limited by the 100,000 daily calls they have set up.
+          </p>
+          <p>
+            Some effort was made to cache that information whenever possible to reduce the number of calls made, but it remains a possible issue.
+          </p>
+        </div>
       </main >
     </>
   );
