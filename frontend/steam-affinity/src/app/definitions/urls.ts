@@ -1,1 +1,1 @@
-export const baseURL = process.env.BASE_URL ? new URL(process.env.BASE_URL) : "invalid url";
+export const baseURL = "http://localhost:8080/api/v1"

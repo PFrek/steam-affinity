@@ -4,6 +4,11 @@ import { PlayerAffinity, PlayerSummary } from "../definitions/types";
 import { baseURL } from "../definitions/urls";
 
 export async function getPlayerSummaries(steamids: string): Promise<PlayerSummary[]> {
+	if (!baseURL) {
+		console.log("Backend base URL not set up in environment variables")
+		return [];
+	}
+
 	const url = new URL("summaries", baseURL);
 	url.searchParams.set("steamids", steamids);
 
@@ -28,6 +33,11 @@ export async function getPlayerSummaries(steamids: string): Promise<PlayerSummar
 }
 
 export async function getFriendsList(steamid: string): Promise<PlayerSummary[]> {
+	if (!baseURL) {
+		console.log("Backend base URL not set up in environment variables")
+		return [];
+	}
+
 	const url = new URL("friends", baseURL);
 	url.searchParams.set("steamid", steamid)
 
@@ -53,6 +63,11 @@ export async function getFriendsList(steamid: string): Promise<PlayerSummary[]> 
 }
 
 export async function getAffinityRanking(steamid: string): Promise<PlayerAffinity[]> {
+	if (!baseURL) {
+		console.log("Backend base URL not set up in environment variables")
+		return [];
+	}
+
 	const url = new URL("friends/ranking", baseURL);
 	url.searchParams.set("steamid", steamid);
 	url.searchParams.set("listGames", "true");

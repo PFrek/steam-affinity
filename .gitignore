@@ -28,3 +28,5 @@ go.work.sum
 build.sh
 start_image.sh
 start_app.sh
+
+compose.yaml
