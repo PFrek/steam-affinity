@@ -2,9 +2,9 @@
 
 ## What is Steam Affinity?
 
-Steam Affinity is a small personal project created for the capstone project assignment of Boot.dev.
+Steam Affinity is a website project that allows comparing a user's Steam game library with those of their Steam friends.
 
-It is meant to compare a Steam user's library with that of their friends, ranking them according to similarity. At least in theory, users with similarly sized libraries and with many games in common should be ranked higher.
+The user's friends are ranked according to the similarity of their game libraries. Users with *similarly sized libraries* and with *many games in common* are ranked higher.
 
 You can also see the games you both own, or the games that are missing from your library that the other user owns.
 
