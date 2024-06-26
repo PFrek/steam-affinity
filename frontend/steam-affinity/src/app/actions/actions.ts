@@ -10,6 +10,7 @@ export async function getPlayerSummaries(steamids: string): Promise<PlayerSummar
 	let summaries: PlayerSummary[] = [];
 
 	try {
+		console.log(`Sending request for Player Summaries: GET ${url.toString()}`)
 		let resp = await fetch(url);
 
 		if (resp.status >= 400) {
@@ -33,6 +34,7 @@ export async function getFriendsList(steamid: string): Promise<PlayerSummary[]> 
 	let friendsList: PlayerSummary[] = [];
 
 	try {
+		console.log(`Sending request for Friends List: GET ${url.toString()}`)
 		let resp = await fetch(url);
 
 		if (resp.status >= 400) {
@@ -58,6 +60,7 @@ export async function getAffinityRanking(steamid: string): Promise<PlayerAffinit
 	let ranking: PlayerAffinity[] = [];
 
 	try {
+		console.log(`Sending request for Affinity Ranking: GET ${url.toString()}`)
 		let resp = await fetch(url);
 
 		if (resp.status >= 400) {
