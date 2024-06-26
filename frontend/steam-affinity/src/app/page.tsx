@@ -32,12 +32,8 @@ export default function Home() {
         </div>
         <div className={styles.section}>
           <h2>What is Steam Affinity?</h2>
-          <p>
-            Steam Affinity is a small personal project created for the capstone project assignment of Boot.dev.
-          </p>
-          <p>
-            It is meant to compare a Steam user's library with that of their friends, ranking them according to similarity.
-          </p>
+          <p>Steam Affinity is a website project that allows comparing a user's Steam game library with those of their Steam friends.</p>
+          <p>The user's friends are ranked according to the similarity of their game libraries. Users with <em>similarly sized libraries</em> and with <em>many games in common</em> are ranked higher.</p>
           <p>
             You can also see the games you both own, or the games that are missing from your library that the other user owns.
           </p>
