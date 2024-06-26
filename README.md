@@ -8,6 +8,8 @@ The user's friends are ranked according to the similarity of their game librarie
 
 You can also see the games you both own, or the games that are missing from your library that the other user owns.
 
+![Usage demo](https://github.com/PFrek/steam-affinity/blob/main/gif/demo.gif)
+
 ## Project structure
 
 The backend code can be found in the project's root folder. Any frontend code will be found in the frontend/steam-affinity folder.
