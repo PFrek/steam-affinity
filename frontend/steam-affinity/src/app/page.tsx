@@ -2,19 +2,20 @@
 
 import { useState } from "react";
 import styles from "./page.module.css";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [userID, setUserID] = useState<string>("");
-  const [validFormState, setValidFormState] = useState<boolean>(true);
+  const router = useRouter();
 
-  function extractID(entry: string): string {
-    const match = entry.match(/(\d+)/);
-    if (match === null) {
-      setValidFormState(false);
-      return "";
+  function handleClick() {
+    let destination = userID;
+    const match = userID.match(/https:\/\/steamcommunity\.com\/profiles\/(\d+)/);
+    if (match !== null) {
+      destination = match[1];
     }
 
-    return match[1];
+    router.push(`/${destination}`);
   }
 
   return (
@@ -24,11 +25,11 @@ export default function Home() {
       </header>
       <main className={styles.main}>
         <div className={styles.section}>
-          <form action={`${userID}`} method="POST" className={styles.form}>
+          <div className={styles.form}>
             <label htmlFor="userID">Steam ID:</label>
-            <input name="userID" type="text" required value={userID} onChange={(val) => setUserID(extractID(val.target.value))} />
-            <button type="submit">Submit</button>
-          </form>
+            <input name="userID" type="text" required value={userID} onChange={(val) => setUserID(val.target.value)} />
+            <button type="submit" onClick={handleClick}>Submit</button>
+          </div>
         </div>
         <div className={styles.section}>
           <h2>What is Steam Affinity?</h2>
