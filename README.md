@@ -1,5 +1,7 @@
 # Steam Affinity
 
+[Live Demo](https://steam-affinity-frontend-edfp5mfira-uc.a.run.app/)
+
 ## What is Steam Affinity?
 
 Steam Affinity is a website project that allows comparing a user's Steam game library with those of their Steam friends.
