@@ -4,7 +4,7 @@ import { useState } from "react";
 import styles from "./GameIcon.module.css";
 
 const imageLoader = ({ src }: { src: string }) => {
-  return `http://media.steampowered.com/steamcommunity/public/images/apps/${src}`;
+  return `https://media.steampowered.com/steamcommunity/public/images/apps/${src}`;
 }
 
 export default function GameIcon({ game, width, height }: { game: Game, width: number, height: number }) {
